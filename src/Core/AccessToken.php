@@ -115,13 +115,16 @@ class AccessToken
         $cacheKey = $this->getCacheKey();
         $cached = $this->getCache()->fetch($cacheKey);
 
-        if ($forceRefresh || empty($cached)) {
-            $token = $this->getTokenFromServer();
+        // 禁止强制刷新
+        if ($forceRefresh) {
+            throw new Exception("getToken: Forbidden refresh access_token fro server");
+        }
 
-            // XXX: T_T... 7200 - 1500
-            $this->getCache()->save($cacheKey, $token[$this->tokenJsonKey], $token['expires_in'] - 1500);
-
-            return $token[$this->tokenJsonKey];
+        if (empty($cached)) {
+            throw new Exception("getToken: Cache empty");
+            //$token = $this->getTokenFromServer();
+            //$this->getCache()->save($cacheKey, $token[$this->tokenJsonKey], $token['expires_in'] - 1500);
+            //return $token[$this->tokenJsonKey];
         }
 
         return $cached;
@@ -229,6 +232,9 @@ class AccessToken
      */
     public function getTokenFromServer()
     {
+        // 禁止从服务器刷新
+        throw new Exception("getTokenFromServer: Forbidden refresh access_token from server");
+
         $params = [
             'appid' => $this->appId,
             'secret' => $this->secret,
