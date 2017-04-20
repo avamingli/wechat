@@ -121,10 +121,7 @@ class AccessToken
         }
 
         if (empty($cached)) {
-            throw new Exception("getToken: Cache empty");
-            //$token = $this->getTokenFromServer();
-            //$this->getCache()->save($cacheKey, $token[$this->tokenJsonKey], $token['expires_in'] - 1500);
-            //return $token[$this->tokenJsonKey];
+            throw new Exception("getToken: Cache empty, setAccessToken fitst");
         }
 
         return $cached;
